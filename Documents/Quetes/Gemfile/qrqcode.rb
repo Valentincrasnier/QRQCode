@@ -1,19 +1,17 @@
-require "rqrcode"
+require "rqrcode_png"
+
 puts "Entrer un mot:"
-png = gets.chomp
+text = gets.chomp
 
-qrcode = RQRCode::QRCode.new("www.google.fr")
-png = qrcode.as_png(
-          resize_gte_to: false,
-          resize_exactly_to: false,
-          fill: 'white',
-          color: 'black',
-          size: 120,
-          border_modules: 4,
-          module_px_size: 6,
-          file: nil # path to write
-          )
-IO.write("/home/valentin/Documents/Quetes/Gemfile/test.png", png.to_s)
+qr = RQRCode::QRCode.new( text, :size => 4, :level => :h )
+
+png = qr.to_img
+png.resize(90, 90).save("test.png")
 
 
-#QRQCode fonctionnel
+qr.modules.each do |row|
+	row.each do |col|
+		print col ? "X" : " "
+	end
+print "\n"
+end
